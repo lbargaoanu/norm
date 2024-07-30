@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mil.Navy.Nrl.Norm.linux-x64", "src\Mil.Navy.Nrl.Norm.linux-x64\Mil.Navy.Nrl.Norm.linux-x64.csproj", "{A4967E0C-FF3E-4B61-BD6B-D63D040585CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NormConsole", "NormConsole\NormConsole.csproj", "{0F1061FD-AEB0-435C-BAC4-0C16CD202524}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NormConsole", "tests\NormConsole\NormConsole.csproj", "{0F1061FD-AEB0-435C-BAC4-0C16CD202524}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
