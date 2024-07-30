@@ -19,8 +19,10 @@ namespace NormConsole
             _sender = configuration["sender"] != null;
             _mutex = new(true, "NormConsole", out var first);
             _normSession = _normInstance.CreateSession("224.1.2.3", 6565, first ? NormNode.NORM_NODE_ANY : Environment.TickCount64);
+            _normSession.GrttEstimate = 0.0001;
+            _normSession.SetGrttProbingMode(NormProbingMode.NORM_PROBE_NONE);
             _normSession.SetRxPortReuse(true);
-            _normSession.SetLoopback(false);
+            _normSession.SetLoopback(true);
             if(_sender)
             {
                 _normSession.StartSender(1024 * 1024, 1400, 64, 16);
