@@ -1,4 +1,5 @@
 ﻿using Mil.Navy.Nrl.Norm;
+using Mil.Navy.Nrl.Norm.Buffers;
 using Mil.Navy.Nrl.Norm.Enums;
 
 namespace NormConsole
@@ -8,7 +9,7 @@ namespace NormConsole
         readonly NormInstance _normInstance = new();
         readonly NormSession _normSession;
         readonly Thread _eventsThread;
-
+        readonly ByteBuffer _dataBuffer = ByteBuffer.AllocateDirect(10*1024);
         public Program()
         {
             _normSession = _normInstance.CreateSession("224.1.2.3", 6565, NormNode.NORM_NODE_ANY);
@@ -22,6 +23,13 @@ namespace NormConsole
 
         void Run()
         {
+            _normSession.SetLoopback(true);
+            while(true)
+            {
+                _normSession.DataEnqueue(_dataBuffer, 0, (int)_dataBuffer.ByteLength);
+                Console.WriteLine("Press ENTER to send data");
+                Console.ReadLine();
+            }
         }
 
         void Events()
