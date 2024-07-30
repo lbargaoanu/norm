@@ -1,4 +1,5 @@
-﻿using Mil.Navy.Nrl.Norm;
+﻿using Microsoft.Extensions.Configuration;
+using Mil.Navy.Nrl.Norm;
 using Mil.Navy.Nrl.Norm.Buffers;
 using Mil.Navy.Nrl.Norm.Enums;
 
@@ -10,10 +11,18 @@ namespace NormConsole
         readonly NormSession _normSession;
         readonly Thread _eventsThread;
         readonly ByteBuffer _dataBuffer = ByteBuffer.AllocateDirect(10*1024);
+        readonly bool _sender;
         public Program()
         {
+            var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
+            _sender = configuration["sender"] != null;
             _normSession = _normInstance.CreateSession("224.1.2.3", 6565, NormNode.NORM_NODE_ANY);
-            _normSession.StartSender(1024 * 1024, 1400, 64, 16);
+            _normSession.SetRxPortReuse(true);
+            _normSession.SetLoopback(false);
+            if(_sender)
+            {
+                _normSession.StartSender(1024 * 1024, 1400, 64, 16);
+            }
             _normSession.StartReceiver(1024 * 1024);
             _eventsThread = new(Events);
             _eventsThread.Start();
@@ -23,7 +32,11 @@ namespace NormConsole
 
         void Run()
         {
-            _normSession.SetLoopback(true);
+            if(!_sender)
+            {
+                Console.WriteLine("Waiting for data");
+                return;
+            }
             while(true)
             {
                 _normSession.DataEnqueue(_dataBuffer, 0, (int)_dataBuffer.ByteLength);
