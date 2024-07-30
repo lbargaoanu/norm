@@ -12,11 +12,13 @@ namespace NormConsole
         readonly Thread _eventsThread;
         readonly ByteBuffer _dataBuffer = ByteBuffer.AllocateDirect(10*1024);
         readonly bool _sender;
+        readonly Mutex _mutex;
         public Program()
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
             _sender = configuration["sender"] != null;
-            _normSession = _normInstance.CreateSession("224.1.2.3", 6565, NormNode.NORM_NODE_ANY);
+            _mutex = new(true, "NormConsole", out var first);
+            _normSession = _normInstance.CreateSession("224.1.2.3", 6565, first ? NormNode.NORM_NODE_ANY : Environment.TickCount64);
             _normSession.SetRxPortReuse(true);
             _normSession.SetLoopback(false);
             if(_sender)
