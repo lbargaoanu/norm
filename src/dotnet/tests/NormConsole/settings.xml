@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
 	<round-trip-time>0.0001</round-trip-time>
-	<tx-robust-factor>20</tx-robust-factor>
-	<default-rx-robust-factor>20</default-rx-robust-factor>
+	<robust-factor>20</robust-factor>
 </configuration>

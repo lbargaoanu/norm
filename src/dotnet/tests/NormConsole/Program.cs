@@ -13,13 +13,12 @@ namespace NormConsole
         public Program()
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
-            _mutex = new(true, "NormConsole", out var first);
+            _mutex = new(default, "NormConsole", out var first);
             _normSession = _normInstance.CreateSession("224.1.2.3", 6565, first ? NormNode.NORM_NODE_ANY : Environment.TickCount64);
-            _normSession.SetDefaultRxRobustFactor(int.Parse(configuration["default-rx-robust-factor"]!));
-            _normSession.SetTxRobustFactor(int.Parse(configuration["tx-robust-factor"]!));
-            var grttEstimate = double.Parse(configuration["round-trip-time"]!);
-            _normSession.GrttEstimate = grttEstimate;
-            if(grttEstimate == 0)
+            var robustFactor = int.Parse(configuration["robust-factor"]!);
+            _normSession.SetTxRobustFactor(robustFactor);
+            _normSession.SetDefaultRxRobustFactor(robustFactor);
+            if((_normSession.GrttEstimate = double.Parse(configuration["round-trip-time"]!)) == 0)
             {
                 _normSession.SetGrttProbingMode(NormProbingMode.NORM_PROBE_NONE);
             }
