@@ -9,14 +9,13 @@ namespace NormConsole
         readonly NormInstance _normInstance = new();
         readonly NormSession _normSession;
         readonly ByteBuffer _dataBuffer = ByteBuffer.AllocateDirect(10*1024);
-        readonly bool _sender;
         readonly Mutex _mutex;
         public Program()
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
-            _sender = configuration["sender"] != null;
             _mutex = new(true, "NormConsole", out var first);
             _normSession = _normInstance.CreateSession("224.1.2.3", 6565, first ? NormNode.NORM_NODE_ANY : Environment.TickCount64);
+            _normSession.SetDefaultRxRobustFactor(int.Parse(configuration["default-rx-robust-factor"]!));
             _normSession.SetTxRobustFactor(int.Parse(configuration["tx-robust-factor"]!));
             var grttEstimate = double.Parse(configuration["round-trip-time"]!);
             _normSession.GrttEstimate = grttEstimate;
@@ -26,21 +25,13 @@ namespace NormConsole
             }
             _normSession.SetRxPortReuse(true);
             _normSession.SetLoopback(true);
-            if(_sender)
-            {
-                _normSession.StartSender(1024 * 1024, 1400, 64, 16);
-            }
+            _normSession.StartSender(1024 * 1024, 1400, 64, 16);
             _normSession.StartReceiver(1024 * 1024);
             new Thread(Events).Start();
         }
         static void Main() => new Program().Run();
         void Run()
         {
-            if(!_sender)
-            {
-                Console.WriteLine("Waiting for data");
-                return;
-            }
             while(true)
             {
                 _normSession.DataEnqueue(_dataBuffer, 0, (int)_dataBuffer.ByteLength);
