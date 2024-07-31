@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<round-trip-time>0.0001</round-trip-time>
+	<round-trip-time>0.001</round-trip-time>
 	<robust-factor>20</robust-factor>
 </configuration>
