@@ -18,7 +18,7 @@ namespace NormConsole
             var robustFactor = int.Parse(configuration["robust-factor"]!);
             _normSession.SetTxRobustFactor(robustFactor);
             _normSession.SetDefaultRxRobustFactor(robustFactor);
-            if((_normSession.GrttEstimate = double.Parse(configuration["round-trip-time"]!)) == 0)
+            if((_normSession.GrttEstimate = double.Parse(configuration["round-trip-time"]!)) != 0)
             {
                 _normSession.SetGrttProbingMode(NormProbingMode.NORM_PROBE_NONE);
             }
