@@ -14,7 +14,8 @@ namespace NormConsole
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
             _mutex = new(default, "NormConsole", out var first);
-            _normSession = _normInstance.CreateSession("224.1.2.3", 6565, first ? NormNode.NORM_NODE_ANY : Environment.TickCount64);
+            var nodeId = first ? NormNode.NORM_NODE_ANY : Environment.TickCount64;
+            _normSession = _normInstance.CreateSession(address: "224.1.2.3", port: 6565, nodeId);
             var robustFactor = int.Parse(configuration["robust-factor"]!);
             _normSession.SetTxRobustFactor(robustFactor);
             _normSession.SetDefaultRxRobustFactor(robustFactor);
@@ -24,8 +25,8 @@ namespace NormConsole
             }
             _normSession.SetRxPortReuse(true);
             _normSession.SetLoopback(true);
-            _normSession.StartSender(1024 * 1024, 1400, 64, 16);
-            _normSession.StartReceiver(1024 * 1024);
+            _normSession.StartSender(bufferSpace: 1024 * 1024, segmentSize: 1400, blockSize: 64, numParity: 16);
+            _normSession.StartReceiver(bufferSpace: 1024 * 1024);
             new Thread(Events).Start();
         }
         static void Main() => new Program().Run();
