@@ -46,7 +46,7 @@ namespace NormConsole
                 var normEvent = _normInstance.GetNextEvent();
                 if(normEvent?.Type == NormEventType.NORM_RX_OBJECT_COMPLETED)
                 {
-                    Console.WriteLine("Received data");
+                    Console.WriteLine($"{DateTime.Now.TimeOfDay} Received data");
                 }
             }
         }
