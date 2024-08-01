@@ -14,7 +14,7 @@ namespace NormConsole
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
             _mutex = new(default, "NormConsole", out var first);
-            var nodeId = first ? NormNode.NORM_NODE_ANY : Environment.TickCount64;
+            var nodeId = first ? NormNode.NORM_NODE_ANY : Environment.ProcessId;
             _normSession = _normInstance.CreateSession(address: "224.1.2.3", port: 6565, nodeId);
             var robustFactor = int.Parse(configuration["robust-factor"]!);
             _normSession.SetTxRobustFactor(robustFactor);
