@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
-	<!-- https://github.com/USNavalResearchLaboratory/norm/blob/669fc4f6719a3f05869f7adec4b3a1c5329d007b/doc/NormDeveloperGuide.xml#L3205 -->
+	<!-- https://lbargaoanu.github.io/norm/NormDeveloperGuide.html#NormSetGrttEstimate -->
 	<round-trip-time>0</round-trip-time>
-	<!-- https://github.com/USNavalResearchLaboratory/norm/blob/669fc4f6719a3f05869f7adec4b3a1c5329d007b/doc/NormDeveloperGuide.xml#L3532 -->
-	https://github.com/USNavalResearchLaboratory/norm/blob/669fc4f6719a3f05869f7adec4b3a1c5329d007b/doc/NormDeveloperGuide.xml#L5607 -->
+	<!-- https://lbargaoanu.github.io/norm/NormDeveloperGuide.html#NormSetTxRobustFactor-->
+	https://lbargaoanu.github.io/norm/NormDeveloperGuide.html#NormSetDefaultRxRobustFactor -->
 	<robust-factor>20</robust-factor>
 </configuration>
