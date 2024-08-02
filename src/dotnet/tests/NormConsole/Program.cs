@@ -13,21 +13,28 @@ namespace NormConsole
         public Program()
         {
             var configuration = new ConfigurationBuilder().AddXmlFile("settings.xml").Build();
+            var robustFactor = int.Parse(configuration["robust-factor"]);
+            var roundTripTime = double.Parse(configuration["round-trip-time"]);
             _mutex = new(default, "NormConsole", out var first);
-            var nodeId = first ? NormNode.NORM_NODE_ANY : Environment.ProcessId;
-            _normSession = _normInstance.CreateSession(address: "224.1.2.3", port: 6565, nodeId);
-            var robustFactor = int.Parse(configuration["robust-factor"]!);
-            _normSession.SetTxRobustFactor(robustFactor);
-            _normSession.SetDefaultRxRobustFactor(robustFactor);
-            if((_normSession.GrttEstimate = double.Parse(configuration["round-trip-time"]!)) != 0)
-            {
-                _normSession.SetGrttProbingMode(NormProbingMode.NORM_PROBE_NONE);
-            }
-            _normSession.SetRxPortReuse(true);
-            _normSession.SetLoopback(true);
-            _normSession.StartSender(bufferSpace: 1024 * 1024, segmentSize: 1400, blockSize: 64, numParity: 16);
-            _normSession.StartReceiver(bufferSpace: 1024 * 1024);
+            _normSession = ConfigureNorm();
             new Thread(Events).Start();
+            NormSession ConfigureNorm()
+            {
+                var nodeId = first ? NormNode.NORM_NODE_ANY : Environment.ProcessId;
+                var normSession = _normInstance.CreateSession(address: "224.1.2.3", port: 6565, nodeId);
+                normSession.SetTxRobustFactor(robustFactor);
+                normSession.SetDefaultRxRobustFactor(robustFactor);
+                normSession.GrttEstimate = roundTripTime;
+                if(roundTripTime != 0)
+                {
+                    normSession.SetGrttProbingMode(NormProbingMode.NORM_PROBE_NONE);
+                }
+                normSession.SetRxPortReuse(true);
+                normSession.SetLoopback(true);
+                normSession.StartSender(bufferSpace: 1024 * 1024, segmentSize: 1400, blockSize: 64, numParity: 16);
+                normSession.StartReceiver(bufferSpace: 1024 * 1024);
+                return normSession;
+            }
         }
         static void Main() => new Program().Run();
         void Run()
