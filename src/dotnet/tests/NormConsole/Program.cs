@@ -42,7 +42,7 @@ namespace NormConsole
             while(true)
             {
                 _normSession.DataEnqueue(_dataBuffer, 0, (int)_dataBuffer.ByteLength);
-                Console.WriteLine("Press ENTER to send data");
+                Console.WriteLine($"{DateTime.Now.TimeOfDay} Press ENTER to send data");
                 Console.ReadLine();
             }
         }
