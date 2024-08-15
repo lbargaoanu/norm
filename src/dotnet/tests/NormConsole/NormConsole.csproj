@@ -21,7 +21,7 @@
   </ItemGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm*.dll norm.dll" Condition="'$(OS)' == 'Windows_NT'" />
+		<Exec Command="copy ..\..\..\..\build\norm*.dll $(TargetDir)&#xD;&#xA;cd $(TargetDir)&#xD;&#xA;del /f norm.dll&#xD;&#xA;ren norm-*.dll norm.dll" Condition="'$(OS)' == 'Windows_NT'" />
 		<Exec Command="cp -f ../../../../build/libnorm.so $(TargetDir)norm.so" Condition="'$(OS)' != 'Windows_NT'" />
 	</Target>
 
